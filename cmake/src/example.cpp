@@ -84,11 +84,16 @@ int main()
     exit(1);
   }
 
+  FactorizationSettingsF64* factorization_settings = leopard_factorization_settings_new_default_f64();
+  std::cout << "pivot_tolerance: " << leopard_factorization_settings_get_pivot_tolerance_f64(factorization_settings) << std::endl;
+  leopard_factorization_settings_set_pivot_tolerance_f64(factorization_settings, 0.02);
+  std::cout << "new pivot_tolerance: " << leopard_factorization_settings_get_pivot_tolerance_f64(factorization_settings) << std::endl << std::endl;
+
   // Finally we can compute the factorization.
   // NOTE: Only at this point do we need the values of the elements in the matrix.
   //       Because of this, if you have a matrix with static pattern, but changing values, you can speed up the computation
   //       by only recomputing the factorization, and not recomputing the index sets, orderings or assembly tree.
-  LDLFactorizationResultF64 ldl = leopard_ldl_factorize_f64(ordered_ij.object, vs.data(), ordering.object, assembly_tree.object);
+  LDLFactorizationResultF64 ldl = leopard_ldl_factorize_f64(ordered_ij.object, vs.data(), ordering.object, assembly_tree.object, factorization_settings);
   if ((int32_t)ldl.code)
   {
     std::cout << leopard_explain_return_code(ldl.code) << std::endl;
@@ -108,6 +113,7 @@ int main()
   // To properly handle resources, you should destroy the different objects when they are not needed anymore,
   // but keep in mind that you can reuse these datastructures for better performance as long as the information used to generate them has not changed.
   leopard_ldl_destroy_f64(ldl.object);
+  leopard_factorization_settings_destroy_f64(factorization_settings);
   leopard_assembly_tree_destroy(assembly_tree.object);
   leopard_ordered_ij_destroy(ordered_ij.object);
   leopard_ordering_destroy(ordering.object);

@@ -1,7 +1,7 @@
 ### BEGIN External leopard CMake integration
 include(ExternalProject)
 ExternalProject_Add(leopard-external
-        URL "https://github.com/molysgaard/leopard/releases/download/v0.1.0/leopard_0.1.0_amd64.zip"
+        URL "https://github.com/molysgaard/leopard/releases/download/v0.2.0/leopard_0.2.0_amd64.zip"
         UPDATE_COMMAND ""
         PATCH_COMMAND ""
         CONFIGURE_COMMAND ""
